@@ -1,27 +1,17 @@
 version: '3'
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-    depends_on:
-      - redis
-    networks:
-      - myapp-network
   redis:
-    image: redis:latest
+    image: redis
+    container_name: meu-redis
     ports:
       - "6379:6379"
-    networks:
-      - myapp-network
-  yarn:
-    image: node:14
+  postgresql:
+    container_name: postgresql_container
+    image: postgres:13
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "postgres"
     volumes:
-      - .:/app
-    working_dir: /app
-networks:
-  myapp-network:
+      - ~/apps/postgres:/var/lib/postgresql/data
